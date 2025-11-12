@@ -55,20 +55,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 @WebServlet("/ch02/method")
 public class HttpMethodServlet extends HttpServlet {
     Map<String,String> datas = new HashMap<>(Map.of(
-            "name", "aaa",
+            "name", "홍길동",
             "age", "50",
-            "address", "earth"
+            "address", "조선"
     ));
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("GET 요청 들어옴");
         System.out.println("요청 메소드 : " + req.getMethod());
         System.out.println("요청 쿼리 파라미터 (datasKey) : " + req.getParameter("datasKey"));
@@ -80,10 +82,34 @@ public class HttpMethodServlet extends HttpServlet {
         String datasKey2 = req.getParameter("datasKey2");
 
         System.out.println(datas.get(datasKey2));
+
+//        HttpServletResponse setContentType() : 응답
+        resp.setContentType("text/html");
+//        UTF_8로 인코딩 되어야 한글이 깨지지 않는다!
+        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+//        문자를 출력하는 역할을 담당함
+        PrintWriter out = resp.getWriter();
+        out.println(datas.get(datasKey));
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("POST 요청 들어옴");
+
+        System.out.println("요청 메소드 : " + req.getMethod());
+        System.out.println("요청 쿼리 파라미터 (KeyName) : " + req.getParameter("keyName"));
+        System.out.println("현재 값 : " + datas.toString());
+        System.out.println("요청 쿼리 파라미터 (value) : " + req.getParameter("value"));
+
+        datas.put(req.getParameter("keyName"), req.getParameter("value"));
+
+        System.out.println(datas.get(req.getParameter("keyName")));
+        System.out.println("변경된 값 : " + datas.toString());
+
+//        응답
+        resp.setStatus(201);
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        resp.getWriter().println("변경 성공!!!");
     }
 }
