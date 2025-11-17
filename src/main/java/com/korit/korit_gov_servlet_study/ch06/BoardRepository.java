@@ -5,10 +5,12 @@ import java.util.List;
 
 public class BoardRepository {
     private static BoardRepository instance;
-    private List<Board> boardList = new ArrayList<>();
+    private List<Board> boardList;
     private int boardId = 1;
 
-    private BoardRepository() {};
+    private BoardRepository() {
+        this.boardList = new ArrayList<>();
+    };
 
     public static BoardRepository getInstance() {
         if (instance == null) {

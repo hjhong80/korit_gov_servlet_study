@@ -14,8 +14,10 @@ public class EncodingFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        System.out.println("[EncodingFilter] 필터 실행");
         servletRequest.setCharacterEncoding(StandardCharsets.UTF_8.name());
         servletResponse.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        filterChain.doFilter(servletRequest,servletResponse);
     }
 
     @Override
